@@ -1,0 +1,14 @@
+[ 2025-11-22 23:26:52,947 ] INFO - === PIPELINE RUN STARTED ===
+[ 2025-11-22 23:26:52,948 ] INFO - === ENTERING Data Ingestion Component ===
+[ 2025-11-22 23:26:52,948 ] INFO - [FOUND CSV] C:\Desktop\ECommmerce Churn\notebook\Ecommerce_data_cleaned.csv
+[ 2025-11-22 23:26:52,977 ] INFO - Loaded dataset \u2192 Shape: (5630, 19)
+[ 2025-11-22 23:26:53,036 ] INFO - Saved RAW data \u2192 artifacts\data.csv
+[ 2025-11-22 23:26:53,084 ] INFO - TRAIN data saved \u2192 artifacts\train.csv
+[ 2025-11-22 23:26:53,084 ] INFO - TEST data saved \u2192 artifacts\test.csv
+[ 2025-11-22 23:26:53,084 ] INFO - === DATA INGESTION COMPLETED ===
+[ 2025-11-22 23:26:53,085 ] INFO - STEP 1 \u2192 Data Ingestion Done
+[ 2025-11-22 23:26:53,137 ] INFO - Read train and test data completed
+[ 2025-11-22 23:26:53,137 ] INFO - Categorical columns: ['PreferredLoginDevice', 'PreferredPaymentMode', 'Gender', 'PreferedOrderCat', 'MaritalStatus']
+[ 2025-11-22 23:26:53,137 ] INFO - Numerical columns: ['Tenure', 'CityTier', 'WarehouseToHome', 'HourSpendOnApp', 'NumberOfDeviceRegistered', 'SatisfactionScore', 'NumberOfAddress', 'Complain', 'OrderAmountHikeFromlastYear', 'CouponUsed', 'OrderCount', 'DaySinceLastOrder', 'CashbackAmount']
+[ 2025-11-22 23:26:53,137 ] ERROR - Exception in data transformation: Error occurred in python script [C:\Desktop\ECommmerce Churn\src\components\data_transformation.py] line number [53] error message [OneHotEncoder.__init__() got an unexpected keyword argument 'sparse']
+[ 2025-11-22 23:26:53,137 ] ERROR - PIPELINE FAILED \u2192 Error occurred in python script [C:\Desktop\ECommmerce Churn\src\components\data_transformation.py] line number [77] error message [Error occurred in python script [C:\Desktop\ECommmerce Churn\src\components\data_transformation.py] line number [53] error message [OneHotEncoder.__init__() got an unexpected keyword argument 'sparse']]

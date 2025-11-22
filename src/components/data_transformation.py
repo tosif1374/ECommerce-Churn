@@ -1,109 +1,101 @@
-import os
 import sys
-import pandas as pd
+import os
 import numpy as np
+import pandas as pd
 from dataclasses import dataclass
+
 from sklearn.compose import ColumnTransformer
-from sklearn.impute import SimpleImputer
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import OneHotEncoder, StandardScaler
+from sklearn.impute import SimpleImputer
 
 from src.exception import CustomException
-from src.logger import logging
+from src.logger import logging as log
 from src.utils import save_object
+
 
 @dataclass
 class DataTransformationConfig:
-    preprocessor_obj_file_path: str = os.path.join('artifacts', 'preprocessor.pkl')
+    preprocessor_obj_file_path: str = os.path.join("artifacts", "preprocessor.pkl")
+
 
 class DataTransformation:
     def __init__(self):
         self.data_transformation_config = DataTransformationConfig()
 
-    def get_data_transformer_object(self):
+    def get_data_transformer(self):
         try:
-            numerical_features = [
-                    "Tenure", "CityTier", "WarehouseToHome", "HourSpendOnApp",
-                    "NumberOfDeviceRegistered", "SatisfactionScore", "NumberOfAddress",
-                    "OrderAmountHikeFromlastYear", "CouponUsed", "OrderCount",
-                    "DaySinceLastOrder", "CashbackAmount"
+            numerical_cols = [
+                'Tenure', 'CityTier', 'WarehouseToHome', 'HourSpendOnApp',
+                'NumberOfDeviceRegistered', 'SatisfactionScore', 'NumberOfAddress',
+                'Complain', 'OrderAmountHikeFromlastYear', 'CouponUsed',
+                'OrderCount', 'DaySinceLastOrder', 'CashbackAmount'
             ]
 
-            categorical_features = [
-                    "PreferredLoginDevice", "PreferredPaymentMode", 
-                    "Gender", "MaritalStatus", "Complain"
+            categorical_cols = [
+                'PreferredLoginDevice', 'PreferredPaymentMode', 'Gender',
+                'PreferedOrderCat', 'MaritalStatus'
             ]
 
-            num_pipeline = Pipeline(
+            log.info(f"Categorical columns: {categorical_cols}")
+            log.info(f"Numerical columns: {numerical_cols}")
+
+            numeric_pipeline = Pipeline(
                 steps=[
                     ("imputer", SimpleImputer(strategy="median")),
                     ("scaler", StandardScaler())
                 ]
             )
 
-            cat_pipeline = Pipeline(
+            categorical_pipeline = Pipeline(
                 steps=[
                     ("imputer", SimpleImputer(strategy="most_frequent")),
-                    ("one_hot_encoder", OneHotEncoder()),
-                    ("scaler", StandardScaler(with_mean=False))
+                    ("onehot", OneHotEncoder(handle_unknown='ignore', sparse_output=False))
                 ]
             )
-
-            logging.info(f"categorical columns: {categorical_features}")
-            logging.info(f"numerical columns: {numerical_features}")
 
             preprocessor = ColumnTransformer(
-                [
-                    ("num_pipeline", num_pipeline, numerical_features),
-                    ("cat_pipeline", cat_pipeline, categorical_features)
+                transformers=[
+                    ("num_pipeline", numeric_pipeline, numerical_cols),
+                    ("cat_pipeline", categorical_pipeline, categorical_cols)
                 ]
             )
-            return preprocessor
+
+            return preprocessor, numerical_cols, categorical_cols
+
         except Exception as e:
             raise CustomException(e, sys)
-        
-    def initiate_data_transformation(self, train_path, test_path):
+
+    def initiate_data_transformation(self, train_path: str, test_path: str):
         try:
-            logging.info("Reading training and testing data")
             train_df = pd.read_csv(train_path)
             test_df = pd.read_csv(test_path)
+            log.info("Read train and test data completed")
 
-            logging.info("Obtaining preprocessing object")
-            preprocessing_obj = self.get_data_transformer_object()
+            target_column = "Churn"
 
-            target_column_name = "Churn"
-            numerical_columns = [
-                    "Tenure", "CityTier", "WarehouseToHome", "HourSpendOnApp",
-                    "NumberOfDeviceRegistered", "SatisfactionScore", "NumberOfAddress",
-                    "OrderAmountHikeFromlastYear", "CouponUsed", "OrderCount",
-                    "DaySinceLastOrder", "CashbackAmount"
-            ]
+            preprocessor, num_cols, cat_cols = self.get_data_transformer()
 
-            input_feature_train_df = train_df.drop(columns=[target_column_name], axis=1)
-            target_feature_train_df = train_df[target_column_name]
+            X_train = train_df.drop(columns=[target_column])
+            y_train = train_df[target_column]
 
-            input_feature_test_df = test_df.drop(columns=[target_column_name], axis=1)
-            target_feature_test_df = test_df[target_column_name]
+            X_test = test_df.drop(columns=[target_column])
+            y_test = test_df[target_column]
 
-            logging.info("Applying preprocessing object on training and testing dataframes")
+            log.info("Fitting and transforming training features")
+            X_train_transformed = preprocessor.fit_transform(X_train)
+            X_test_transformed = preprocessor.transform(X_test)
 
-            input_feature_train_arr = preprocessing_obj.fit_transform(input_feature_train_df)
-            input_feature_test_arr = preprocessing_obj.transform(input_feature_test_df)
-
-            train_arr = np.c_[input_feature_train_arr, np.array(target_feature_train_df)]
-            test_arr = np.c_[input_feature_test_arr, np.array(target_feature_test_df)]
-
-            logging.info("Saving preprocessing object")
+            train_arr = np.c_[X_train_transformed, y_train]
+            test_arr = np.c_[X_test_transformed, y_test]
 
             save_object(
-                file_path=self.data_transformation_config.preprocessor_obj_file_path,
-                obj=preprocessing_obj
+                self.data_transformation_config.preprocessor_obj_file_path,
+                preprocessor
             )
 
-            return (
-                train_arr,
-                test_arr,
-                self.data_transformation_config.preprocessor_obj_file_path,
-            )
+            return train_arr, test_arr, self.data_transformation_config.preprocessor_obj_file_path
+
         except Exception as e:
+            log.error(f"Exception in data transformation: {e}")
             raise CustomException(e, sys)
