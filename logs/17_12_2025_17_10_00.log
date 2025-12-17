@@ -1,0 +1,23 @@
+[ 2025-12-17 17:10:00,399 ] INFO - NumExpr defaulting to 12 threads.
+[ 2025-12-17 17:10:01,846 ] INFO - === PIPELINE RUN STARTED ===
+[ 2025-12-17 17:10:01,846 ] INFO - === ENTERING Data Ingestion Component ===
+[ 2025-12-17 17:10:01,847 ] INFO - [FOUND CSV] C:\Desktop\ECommmerce Churn\notebook\Ecommerce_data_cleaned.csv
+[ 2025-12-17 17:10:01,860 ] INFO - Loaded dataset \u2192 Shape: (5630, 19)
+[ 2025-12-17 17:10:01,895 ] INFO - Saved RAW data \u2192 artifacts\data.csv
+[ 2025-12-17 17:10:01,935 ] INFO - TRAIN data saved \u2192 artifacts\train.csv
+[ 2025-12-17 17:10:01,935 ] INFO - TEST data saved \u2192 artifacts\testpy.csv
+[ 2025-12-17 17:10:01,937 ] INFO - === DATA INGESTION COMPLETED ===
+[ 2025-12-17 17:10:01,937 ] INFO -  Data Ingestion Done
+[ 2025-12-17 17:10:01,967 ] INFO - Read train and test data completed
+[ 2025-12-17 17:10:01,967 ] INFO - Categorical columns: ['PreferredLoginDevice', 'PreferredPaymentMode', 'Gender', 'PreferedOrderCat', 'MaritalStatus']
+[ 2025-12-17 17:10:01,967 ] INFO - Numerical columns: ['Tenure', 'CityTier', 'WarehouseToHome', 'HourSpendOnApp', 'NumberOfDeviceRegistered', 'SatisfactionScore', 'NumberOfAddress', 'Complain', 'OrderAmountHikeFromlastYear', 'CouponUsed', 'OrderCount', 'DaySinceLastOrder', 'CashbackAmount']
+[ 2025-12-17 17:10:01,968 ] INFO - Fitting and transforming training features
+[ 2025-12-17 17:10:01,987 ] INFO -  Data Transformation Done
+[ 2025-12-17 17:10:01,987 ] INFO - Split training and test input data
+[ 2025-12-17 17:10:01,987 ] WARNING - evaluate_models failed or not available, fallback to basic fit/eval: name 'evaluate_models' is not defined
+[ 2025-12-17 17:10:06,859 ] INFO - Best model: XGBClassifier with score: 0.9875666074600356
+[ 2025-12-17 17:10:06,859 ] INFO - Fitting best model on full training data before saving
+[ 2025-12-17 17:10:06,921 ] INFO - Saved trained model at: artifacts\model.pkl
+[ 2025-12-17 17:10:06,923 ] INFO - Best model test accuracy: 0.9875666074600356
+[ 2025-12-17 17:10:06,926 ] INFO - Model Training Completed \u2192 Result: 0.9875666074600356
+[ 2025-12-17 17:10:06,926 ] INFO - === FULL PIPELINE SUCCESS ===

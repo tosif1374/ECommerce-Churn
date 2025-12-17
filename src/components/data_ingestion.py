@@ -15,7 +15,7 @@ from src.components.model_trainer import ModelTrainer
 class DataIngestionConfig:
     raw_data_path: str = os.path.join("artifacts", "data.csv")
     train_data_path: str = os.path.join("artifacts", "train.csv")
-    test_data_path: str = os.path.join("artifacts", "test.csv")
+    test_data_path: str = os.path.join("artifacts", "testpy.csv")
 
 
 class DataIngestion:
@@ -96,17 +96,17 @@ if __name__ == "__main__":
     try:
         log.info("=== PIPELINE RUN STARTED ===")
         
-        # 1️⃣ Data Ingestion
+        # 1️Data Ingestion
         ingestion = DataIngestion()
         train_path, test_path = ingestion.initiate_data_ingestion()
         log.info("STEP 1 → Data Ingestion Done")
 
-        # 2️⃣ Data Transformation
+        # 2️Data Transformation
         transformer = DataTransformation()
         train_arr, test_arr, preprocessor_path = transformer.initiate_data_transformation(train_path, test_path)
         log.info("STEP 2 → Data Transformation Done")
 
-        # 3️⃣ Model Training
+        #  Model Training
         trainer = ModelTrainer()
         training_result = trainer.initiate_model_trainer(train_arr, test_arr)
         log.info(f"STEP 3 → Model Training Completed → Result: {training_result}")
