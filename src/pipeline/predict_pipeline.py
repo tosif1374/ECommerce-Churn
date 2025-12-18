@@ -31,7 +31,7 @@ class CustomData:
                  NumberOfDeviceRegistered, SatisfactionScore, NumberOfAddress,
                  Complain, OrderAmountHikeFromlastYear, CouponUsed, OrderCount,
                    DaySinceLastOrder, CashbackAmount, Gender, PreferredLoginDevice,
-                     PreferredPaymentMode, PreferedOrderCat,Tenure,MaritalStatus):
+                     PreferredPaymentMode, PreferedOrderCat,Tenure,MaritalStatus, high_price):
         self.CityTier = CityTier
         self.WarehouseToHome = WarehouseToHome
         self.HourSpendOnApp = HourSpendOnApp
@@ -50,6 +50,7 @@ class CustomData:
         self.PreferedOrderCat = PreferedOrderCat
         self.MaritalStatus = MaritalStatus
         self.Tenure = Tenure
+        self.high_price = high_price
 
 
 
@@ -74,7 +75,8 @@ class CustomData:
                 "PreferredPaymentMode": [self.PreferredPaymentMode],
                 "PreferedOrderCat": [self.PreferedOrderCat],
                 "MaritalStatus": [self.MaritalStatus],
-                "Tenure": [self.Tenure]
+                "Tenure": [self.Tenure],
+                "high_price": [self.high_price]
 
             }
             return pd.DataFrame(custom_data_input_dict)

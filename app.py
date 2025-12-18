@@ -27,7 +27,8 @@ def index():
                 PreferredLoginDevice=request.form["PreferredLoginDevice"],
                 PreferredPaymentMode=request.form["PreferredPaymentMode"],
                 PreferedOrderCat=request.form["PreferedOrderCat"],
-                MaritalStatus=request.form["MaritalStatus"]
+                MaritalStatus=request.form["MaritalStatus"],
+                high_price=int(request.form["High Price"])
             )
 
             df = data.get_data_as_data_frame()

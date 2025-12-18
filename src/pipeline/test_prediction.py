@@ -18,7 +18,8 @@ custom_data = CustomData(
     PreferredPaymentMode="COD",
     PreferedOrderCat="Laptop",
     MaritalStatus="Single",
-    Tenure=12
+    Tenure=12,
+    high_price=1
 )
 
 df = custom_data.get_data_as_data_frame()
