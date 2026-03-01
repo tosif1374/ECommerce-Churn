@@ -14,10 +14,13 @@ def run_pipeline():
         train_path, test_path = ingestion_obj.initiate_data_ingestion()
         logger.info(" Data Ingestion Done")
 
+        # ✅ REQUIRED FIX ONLY
+        train_path = "artifacts/train_enriched.csv"
+
         transformation_obj = DataTransformation()
         train_arr, test_arr, preprocessor = transformation_obj.initiate_data_transformation(
-    train_path, test_path
-)
+            train_path, test_path
+        )
 
         logger.info(" Data Transformation Done")
 
@@ -30,6 +33,7 @@ def run_pipeline():
     except Exception as e:
         logger.error("PIPELINE FAILED")
         raise CustomException(e, sys)
+    return accuracy
 
 from src.scraping.snapdeal_scraper import scrape_snapdeal
 from src.utils import clean_scraped_data

@@ -1,37 +1,91 @@
 import sys
+import logging
 import pandas as pd
+
 from src.exception import CustomException
 from src.utils import load_object
+
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import accuracy_score
 from sklearn.base import clone
 
 
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s"
+)
+
+logger = logging.getLogger(__name__)
+
+
 class PredictPipeline:
     def __init__(self):
-        pass
+        logger.info("PredictPipeline initialized")
 
-    def predict(self,features):
+    def predict(self, features):
         try:
-             model_path='artifacts/model.pkl'
-             preprocessor_path ='artifacts/preprocessor.pkl'
-             model=load_object(file_path=model_path)
-             preprocessor = load_object(file_path=preprocessor_path)
-             data_scaled=preprocessor.transform(features)
-             preds=model.predict(data_scaled)
-             return preds
+            logger.info("Loading model and preprocessor for prediction")
+
+            model = load_object(file_path="artifacts/model.pkl")
+            preprocessor = load_object(file_path="artifacts/preprocessor.pkl")
+
+            logger.info("Transforming input features")
+            data_scaled = preprocessor.transform(features)
+
+            logger.info("Generating class prediction")
+            preds = model.predict(data_scaled)
+
+            logger.info(f"Prediction completed: {preds}")
+            return preds
+
         except Exception as e:
-            raise CustomException(e,sys)
+            logger.error(f"Error during prediction: {e}")
+            raise CustomException(e, sys)
 
+    def predict_proba(self, features):
+        try:
+            logger.info("Loading model and preprocessor for probability prediction")
 
+            model = load_object(file_path="artifacts/model.pkl")
+            preprocessor = load_object(file_path="artifacts/preprocessor.pkl")
+
+            logger.info("Transforming input features")
+            data_scaled = preprocessor.transform(features)
+
+            logger.info("Generating probability prediction")
+            proba = model.predict_proba(data_scaled)
+
+            logger.info(f"Prediction probabilities: {proba}")
+            return proba
+
+        except Exception as e:
+            logger.error(f"Error during probability prediction: {e}")
+            raise CustomException(e, sys)
 
 
 class CustomData:
-    def __init__(self, CityTier, WarehouseToHome, HourSpendOnApp,
-                 NumberOfDeviceRegistered, SatisfactionScore, NumberOfAddress,
-                 Complain, OrderAmountHikeFromlastYear, CouponUsed, OrderCount,
-                   DaySinceLastOrder, CashbackAmount, Gender, PreferredLoginDevice,
-                     PreferredPaymentMode, PreferedOrderCat,Tenure,MaritalStatus, high_price):
+    def __init__(
+        self,
+        CityTier,
+        WarehouseToHome,
+        HourSpendOnApp,
+        NumberOfDeviceRegistered,
+        SatisfactionScore,
+        NumberOfAddress,
+        Complain,
+        OrderAmountHikeFromlastYear,
+        CouponUsed,
+        OrderCount,
+        DaySinceLastOrder,
+        CashbackAmount,
+        Gender,
+        PreferredLoginDevice,
+        PreferredPaymentMode,
+        PreferedOrderCat,
+        Tenure,
+        MaritalStatus,
+        high_price,
+    ):
         self.CityTier = CityTier
         self.WarehouseToHome = WarehouseToHome
         self.HourSpendOnApp = HourSpendOnApp
@@ -44,20 +98,21 @@ class CustomData:
         self.OrderCount = OrderCount
         self.DaySinceLastOrder = DaySinceLastOrder
         self.CashbackAmount = CashbackAmount
+        self.Tenure = Tenure
         self.Gender = Gender
         self.PreferredLoginDevice = PreferredLoginDevice
         self.PreferredPaymentMode = PreferredPaymentMode
         self.PreferedOrderCat = PreferedOrderCat
         self.MaritalStatus = MaritalStatus
-        self.Tenure = Tenure
         self.high_price = high_price
 
-
-
+        logger.info("CustomData object created")
 
     def get_data_as_data_frame(self):
         try:
-            custom_data_input_dict = {
+            logger.info("Converting input data to DataFrame")
+
+            data_dict = {
                 "CityTier": [self.CityTier],
                 "WarehouseToHome": [self.WarehouseToHome],
                 "HourSpendOnApp": [self.HourSpendOnApp],
@@ -70,47 +125,20 @@ class CustomData:
                 "OrderCount": [self.OrderCount],
                 "DaySinceLastOrder": [self.DaySinceLastOrder],
                 "CashbackAmount": [self.CashbackAmount],
+                "Tenure": [self.Tenure],
                 "Gender": [self.Gender],
                 "PreferredLoginDevice": [self.PreferredLoginDevice],
                 "PreferredPaymentMode": [self.PreferredPaymentMode],
                 "PreferedOrderCat": [self.PreferedOrderCat],
                 "MaritalStatus": [self.MaritalStatus],
-                "Tenure": [self.Tenure],
-                "high_price": [self.high_price]
-
+                "high_price": [self.high_price],
             }
-            return pd.DataFrame(custom_data_input_dict)
+
+            df = pd.DataFrame(data_dict)
+            logger.info("DataFrame created successfully")
+
+            return df
+
         except Exception as e:
+            logger.error(f"Error while creating DataFrame: {e}")
             raise CustomException(e, sys)
-
-def evaluate_models(X_train, y_train, X_test, y_test, models, param):
-    try:
-        report = {}
-
-        for model_name, model in models.items():
-            params = param[model_name]
-
-            # Hyperparameter tuning
-            gs = GridSearchCV(model, para, cv=3, n_jobs=-1, verbose=0)
-            gs.fit(X_train, y_train)
-
-            # Set best params
-            model.set_params(**gs.best_params_)
-            model.fit(X_train, y_train)
-
-            # Predictions
-            y_train_pred = model.predict(X_train)
-            y_test_pred = model.predict(X_test)
-
-            # Classification score (accuracy)
-            train_acc = accuracy_score(y_train, y_train_pred)
-            test_acc = accuracy_score(y_test, y_test_pred)
-
-            # Save only test accuracy
-            report[list(models.keys())[i]] = test_acc
-
-        return report
-
-    except Exception as e:
-        raise CustomException(e, sys)
-          

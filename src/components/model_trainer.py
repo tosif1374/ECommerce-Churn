@@ -1,5 +1,8 @@
 import os
 import sys
+import mlflow
+import mlflow.sklearn
+
 from dataclasses import dataclass
 
 import numpy as np
@@ -48,7 +51,7 @@ class ModelTrainer:
                 "K-Neighbors Classifier": KNeighborsClassifier(),
                 "Decision Tree": DecisionTreeClassifier(),
                 "Random Forest": RandomForestClassifier(),
-                "XGBClassifier": XGBClassifier(use_label_encoder=False, eval_metric="logloss"),
+                "XGBClassifier": XGBClassifier( eval_metric="logloss"),
                 "CatBoost Classifier": CatBoostClassifier(verbose=False),
                 "AdaBoost Classifier": AdaBoostClassifier()
             }

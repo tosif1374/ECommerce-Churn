@@ -5,6 +5,7 @@
 <title>E-Commerce Customer Churn Prediction</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
@@ -110,7 +111,8 @@ button:hover {
 <div class="container">
 <h2>🛒 E-Commerce Customer Churn Prediction</h2>
 
-<form method="POST">
+<form method="POST" action="/predict">
+
 
 <!-- Numerical Inputs -->
 <div class="form-group">
@@ -239,11 +241,12 @@ button:hover {
 </div>
 <div class="form-group">
 <label>High Price (0 or 1)</label>
-<select name="High Price">
+<select name="high_price" required>
 <option value="0">0 - No</option>
 <option value="1">1 - Yes</option>
 </select>
 </div>
+
 
 
 <div class="full">
@@ -258,6 +261,11 @@ Prediction Result: {{ prediction }}
 
 </form>
 </div>
+<div><form method="POST" action="/predict">
+    
+</form>
+</div>
 
 </body>
+
 </html>

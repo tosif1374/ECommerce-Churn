@@ -1,0 +1,25 @@
+[ 2026-03-01 19:13:13,549 ] INFO - Cleaning scraped data...
+[ 2026-03-01 19:13:13,603 ] INFO - Scraped data cleaned and merged into training data.
+[ 2026-03-01 19:13:14,548 ] INFO - Training started
+[ 2026-03-01 19:13:14,549 ] INFO - === PIPELINE RUN STARTED ===
+[ 2026-03-01 19:13:14,549 ] INFO - === ENTERING Data Ingestion Component ===
+[ 2026-03-01 19:13:14,550 ] INFO - [FOUND CSV] C:\Desktop\ECommmerce Churn\notebook\Ecommerce_data_cleaned.csv
+[ 2026-03-01 19:13:14,561 ] INFO - Loaded dataset \u2192 Shape: (5630, 19)
+[ 2026-03-01 19:13:14,597 ] INFO - Saved RAW data \u2192 artifacts\data.csv
+[ 2026-03-01 19:13:14,637 ] INFO - TRAIN data saved \u2192 artifacts\train.csv
+[ 2026-03-01 19:13:14,637 ] INFO - TEST data saved \u2192 artifacts\testpy.csv
+[ 2026-03-01 19:13:14,637 ] INFO - === DATA INGESTION COMPLETED ===
+[ 2026-03-01 19:13:14,637 ] INFO -  Data Ingestion Done
+[ 2026-03-01 19:13:14,664 ] INFO - Read train and test data completed
+[ 2026-03-01 19:13:14,664 ] INFO - Categorical columns: ['PreferredLoginDevice', 'PreferredPaymentMode', 'Gender', 'PreferedOrderCat', 'MaritalStatus']
+[ 2026-03-01 19:13:14,664 ] INFO - Numerical columns: ['Tenure', 'CityTier', 'WarehouseToHome', 'HourSpendOnApp', 'NumberOfDeviceRegistered', 'SatisfactionScore', 'NumberOfAddress', 'Complain', 'OrderAmountHikeFromlastYear', 'CouponUsed', 'OrderCount', 'DaySinceLastOrder', 'CashbackAmount']
+[ 2026-03-01 19:13:14,665 ] INFO - Fitting and transforming training features
+[ 2026-03-01 19:13:14,687 ] INFO -  Data Transformation Done
+[ 2026-03-01 19:13:14,688 ] INFO - Split training and test input data
+[ 2026-03-01 19:13:14,688 ] WARNING - evaluate_models failed or not available, fallback to basic fit/eval: name 'evaluate_models' is not defined
+[ 2026-03-01 19:13:21,072 ] INFO - Best model: XGBClassifier with score: 0.9875666074600356
+[ 2026-03-01 19:13:21,072 ] INFO - Fitting best model on full training data before saving
+[ 2026-03-01 19:13:21,147 ] INFO - Saved trained model at: artifacts\model.pkl
+[ 2026-03-01 19:13:21,150 ] INFO - Best model test accuracy: 0.9875666074600356
+[ 2026-03-01 19:13:21,154 ] INFO - Model Training Completed \u2192 Result: 0.9875666074600356
+[ 2026-03-01 19:13:21,154 ] INFO - === FULL PIPELINE SUCCESS ===
